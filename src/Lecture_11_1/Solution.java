@@ -1,4 +1,4 @@
-package Lecture11_1;
+package Lecture_11_1;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

@@ -25,9 +25,7 @@ public class Solution {
             }
             Collections.sort(listInt);
             max = listInt.get(listInt.size() - 1);
-            System.out.println(max);
             String result = String.format("\n" + "%-8d%-30s%-8s%-4s", ++max, args[1], args[2], args[3]);
-            System.out.println(result);
             fW.write(result);
             bR.close();
             bRIS.close();

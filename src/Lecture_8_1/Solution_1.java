@@ -1,4 +1,4 @@
-package Lecture_8;
+package Lecture_8_1;
 
 public class Solution_1 {
 

@@ -12,15 +12,18 @@ import java.util.regex.Pattern;
 public class Solution {
     public static void main(String[] args) throws IOException {
         FileReader fR = new FileReader(args[0]);
-        int result = 0;
+        double resultProb = 0;
+        double resultSymb = 0;
         while (fR.ready()) {
             Character ch = (char) fR.read();
-            Pattern pattern = Pattern.compile("[a-zA-Z]");
+            Pattern pattern = Pattern.compile("[ ]");
             Matcher matcher = pattern.matcher(ch.toString());
             if (matcher.find()) {
-                result++;
+                resultProb++;
             }
+                resultSymb++;
         }
+        String result = String.format("%.2f",resultProb / resultSymb * 100);
         System.out.println(result);
         fR.close();
     }

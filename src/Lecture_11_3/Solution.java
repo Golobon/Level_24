@@ -2,8 +2,6 @@ package Lecture_11_3;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Solution {
@@ -48,7 +46,7 @@ public class Solution {
             FileWriter fW2 = new FileWriter(path, true);
 
             for (int i = 0; i < listProduct.size(); i++) {
-                fW2.write(String.format("%-8d%-30s%-8s%-4s",
+                fW2.write(String.format("%-8d%-30s%-8.2f%-4s",
                         listProduct.get(i).getId(),
                         listProduct.get(i).getProductName(),
                         listProduct.get(i).getPrice(),

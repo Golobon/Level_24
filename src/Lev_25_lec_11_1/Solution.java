@@ -13,11 +13,11 @@ import java.util.List;
 
 public class Solution {
     public static List<LineItem> lines = new ArrayList<LineItem>();
-    public static List<String> fileList1 = new ArrayList<>();
-    public static List<String> fileList2 = new ArrayList<>();
-
-
     public static void main(String[] args) throws IOException {
+
+        List<String> fileList1 = new ArrayList<>();
+        List<String> fileList2 = new ArrayList<>();
+
         try (BufferedReader bR1 = new BufferedReader(new InputStreamReader(System.in))) {
             String path1 = bR1.readLine();
             String path2 = bR1.readLine();
@@ -25,43 +25,35 @@ public class Solution {
             try (BufferedReader bR2 = new BufferedReader(new FileReader(path1));
                  BufferedReader bR3 = new BufferedReader(new FileReader(path2))) {
 
-                while (bR2.ready()) {
-                    fileList1.add(bR2.readLine());
-                }
+                while (bR2.ready()) { fileList1.add(bR2.readLine()); }
 
-                while (bR3.ready()) {
-                    fileList2.add(bR3.readLine());
-                }
+                while (bR3.ready()) { fileList2.add(bR3.readLine()); }
 
                 for (int i = 0; i < Math.max(fileList1.size(), fileList2.size()); i++) {
                    if (fileList1.size() > i + 1 && fileList2.size() > i + 1) {
                         if (!fileList1.get(i).equals(fileList2.get(i)) &&
                                 fileList1.get(i).equals(fileList2.get(i + 1))) {
-                            fileList1.add(i, "ххххххХ");
+                            fileList1.add(i, null);
                         } else if (!fileList1.get(i).equals(fileList2.get(i)) &&
                                 !fileList1.get(i).equals(fileList2.get(i + 1))) {
-                            fileList2.add(i, "ххххххХ"); } } }
+                            fileList2.add(i, null); } } }
 
-                if (fileList1.size() > fileList2.size()) fileList2.add("ххххххХ");
-                else if (fileList2.size() > fileList1.size()) fileList1.add("ххххххХ");
+                if (fileList1.size() > fileList2.size()) fileList2.add(null);
+                else if (fileList2.size() > fileList1.size()) fileList1.add(null);
 
                 System.out.println(fileList1);
                 System.out.println(fileList2);
 
                 for (int i = 0; i < fileList1.size(); i++) {
-                    if (fileList1.get(i).equals(fileList2.get(i))) {
+                    if (fileList1.get(i) != null &&
+                        fileList2.get(i) != null &&
+                        fileList1.get(i).equals(fileList2.get(i))) {
                         lines.add(new LineItem(Type.SAME, fileList1.get(i)));
-                    } else if (fileList2.get(i).equals("ххххххХ")) {
+                    } else if (fileList2.get(i) == null) {
                         lines.add(new LineItem(Type.REMOVED, fileList1.get(i)));
-                    } else if (fileList1.get(i).equals("ххххххХ")) {
+                    } else if (fileList1.get(i) == null) {
                         lines.add(new LineItem(Type.ADDED, fileList2.get(i)));
-                    } }
-
-            }
-        }
-        System.out.println(lines);
-    }
-
+                    } } } } System.out.println(lines); }
 
     public static enum Type {
         ADDED,        //добавлена новая строка
@@ -75,8 +67,7 @@ public class Solution {
 
         public LineItem(Type type, String line) {
             this.type = type;
-            this.line = line;
-        }
+            this.line = line; }
 
         @Override
         public String toString() {
@@ -90,9 +81,5 @@ public class Solution {
                     break;
                 case SAME:
                     type = "SAME:    ";
-                    break;
-            }
-            return type + line + "\n";
-        }
-    }
-}
+                    break; }
+            return type + line + "\n"; } } }

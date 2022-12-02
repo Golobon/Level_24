@@ -68,7 +68,7 @@ public class FileConsoleWriter {
 
     public static void main(String[] args) throws IOException {
         char[] ch = "Строка".toCharArray();
-        FileConsoleWriter fCW = new FileConsoleWriter("111.big");
+        FileConsoleWriter fCW = new FileConsoleWriter("111.big", true);
         fCW.write(1);
         System.out.println();
         fCW.write("Строка");
@@ -78,5 +78,6 @@ public class FileConsoleWriter {
         fCW.write(ch, 2, 3);
         System.out.println();
         fCW.write(ch);
+        fCW.close();
     }
 }

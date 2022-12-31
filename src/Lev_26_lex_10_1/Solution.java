@@ -1,65 +1,45 @@
 package Lev_26_lex_10_1;
 
-import java.io.*;
-
 /*
-Переопределение сериализации в потоке
+Делаем правильный вывод
 */
 
-public class Solution implements Serializable, AutoCloseable {
-    transient private FileOutputStream stream;
-    private String fileName;
-
-    public Solution(String fileName) throws FileNotFoundException {
-        this.stream = new FileOutputStream(fileName);
-        this.fileName = fileName;
+public class Solution {
+    public static void main(String[] s) {
+        A a = new C();
+        a.method2();
     }
 
-    public void writeObject(String string) throws IOException {
-        stream.write(string.getBytes());
-        stream.write("\n".getBytes());
-        stream.flush();
+    public static class A {
+        private void method1() {
+            System.out.println("A class, method1");
+        }
+
+        public void method2() {
+            System.out.println("A class, method2");
+            method1();
+        }
     }
 
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(fileName);
+    public static class B extends A {
+        private void method1() {
+            super.method2();
+            System.out.println("B class, method1");
+        }
+
+        public void method2() {
+            System.out.println("B class, method2");
+        }
     }
 
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        stream = new FileOutputStream(fileName, true);
-    }
+    public static class C extends B {
+        private void method1() {
+            System.out.println("C class, method1");
+        }
 
-    @Override
-    public void close() throws Exception {
-        System.out.println("Closing everything!");
-        stream.close();
-    }
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        ByteArrayOutputStream bAOS = new ByteArrayOutputStream();
-        ObjectOutputStream oOs = new ObjectOutputStream(bAOS);
-
-        Solution sol = new Solution("111.big");
-        System.out.println(sol.stream);
-        oOs.writeObject(sol);
-
-        bAOS.close();
-        oOs.close();
-
-        System.out.println(sol.fileName);
-
-        ByteArrayInputStream bAIS = new ByteArrayInputStream(bAOS.toByteArray());
-        ObjectInputStream oIS = new ObjectInputStream(bAIS);
-
-        Solution solClone = (Solution) oIS.readObject();
-        bAIS.close();
-        oIS.close();
-
-        System.out.println(solClone.fileName);
-
-        System.out.println(solClone.stream);
-
+        public void method2() {
+            System.out.println("C class, method2");
+            super.method1();
+        }
     }
 }

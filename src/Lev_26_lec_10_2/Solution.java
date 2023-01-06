@@ -10,10 +10,10 @@ import java.util.List;
 public class Solution {
     public static void main(String[] args) {
         int[][] crossword = new int[][]{
-                {'f', 'd', 'e', 'r', 'l', 'k'},
+                {'f', 'd', 's', 'r', 'l', 'k'},
                 {'u', 's', 'a', 'm', 'e', 'o'},
-                {'l', 'n', 'g', 'r', 'o', 'v'},
-                {'m', 'l', 'p', 'r', 'r', 'h'},
+                {'l', 'n', 'm', 'r', 'o', 'v'},
+                {'m', 'l', 'e', 'r', 'r', 'h'},
                 {'p', 'o', 'e', 'e', 'j', 'j'}
         };
         detectAllWords(crossword, "same");
@@ -64,42 +64,21 @@ same - (1, 1) - (4, 1)
                             //Создаем цикл с количеством повторений, равным длине слова
                             for (int m = 1; m < wordLenth; m++) {
 
-                                //ищем по горизонтали вправо
-                                if (l + (wordLenth - 1) <= cross2[k].length) {
-                                    if (cross2[k][l + m] == ch[m]) {
-                                        sB.append((char) cross2[k][l + m]);
-                                        System.out.print((char) cross2[k][l + m]);
-                                        checkWordLenth = checkWordLenth + 1;
-                                    }
-                                    else checkWordLenth = 0;
-                                }
-                                if (checkWordLenth == wordLenth) {
 
-                                    lastCharX = k;     //Определяем координаты (строка)
-                                    lastCharY = l + m; //последней буквы (столбец)
-
-                                    Word word = new Word(sB.toString());
-                                    word.setStartPoint(firstCharY - 1, firstCharX - 1);
-                                    word.setEndPoint(lastCharY - 1, lastCharX - 1);
-                                    list.add(word);
-                                    System.out.println();
-                                    System.out.println(word);
-                                    word = null;
-                                }
 
                                 //ищем по горизонтали влево
-                                if ((l + 1) + (wordLenth - 1) > 0) {
-                                    if (cross2[k][l + m] == ch[m]) {
-                                        sB.append((char) cross2[k][l + m]);
-                                        System.out.print((char) cross2[k][l + m]);
+                                if (l - (wordLenth - 1) > 0) {
+                                    if (cross2[k][l - m] == ch[m]) {
+                                        sB.append((char) cross2[k][l - m]);
+                                        System.out.print((char) cross2[k][l - m]);
                                         checkWordLenth = checkWordLenth + 1;
                                     }
                                     else checkWordLenth = 0;
-                                }
+
                                 if (checkWordLenth == wordLenth) {
 
                                     lastCharX = k;     //Определяем координаты (строка)
-                                    lastCharY = l + m; //последней буквы (столбец)
+                                    lastCharY = l - m; //последней буквы (столбец)
 
                                     Word word = new Word(sB.toString());
                                     word.setStartPoint(firstCharY - 1, firstCharX - 1);
@@ -108,12 +87,60 @@ same - (1, 1) - (4, 1)
                                     System.out.println();
                                     System.out.println(word);
                                     word = null;
+                                }
+                                }
+
+                                //ищем по вертикали вниз
+                                if ((k + 1) + (wordLenth + 1) <= cross2.length) {
+                                    if (cross2[k + m][l] == ch[m]) {
+                                        sB.append((char) cross2[k + m][l]);
+                                        System.out.print((char) cross2[k + m][l]);
+                                        checkWordLenth = checkWordLenth + 1;
+                                    }
+                                    else checkWordLenth = 0;
+
+                                    if (checkWordLenth == wordLenth) {
+
+                                        lastCharX = k + m;     //Определяем координаты (строка)
+                                        lastCharY = l;         //последней буквы (столбец)
+
+                                        Word word = new Word(sB.toString());
+                                        word.setStartPoint(firstCharY - 1, firstCharX - 1);
+                                        word.setEndPoint(lastCharY - 1, lastCharX - 1);
+                                        list.add(word);
+                                        System.out.println();
+                                        System.out.println(word);
+                                        word = null;
+                                    }
+                                }
+
+                                //ищем по вертикали вверх
+                                if (k - (wordLenth - 1) > 0) {
+                                    if (cross2[k - m][l] == ch[m]) {
+                                        sB.append((char) cross2[k - m][l]);
+                                        System.out.print((char) cross2[k - m][l]);
+                                        checkWordLenth = checkWordLenth + 1;
+                                    }
+                                    else checkWordLenth = 0;
+
+                                    if (checkWordLenth == wordLenth) {
+
+                                        lastCharX = k - m;     //Определяем координаты (строка)
+                                        lastCharY = l;         //последней буквы (столбец)
+
+                                        Word word = new Word(sB.toString());
+                                        word.setStartPoint(firstCharY - 1, firstCharX - 1);
+                                        word.setEndPoint(lastCharY - 1, lastCharX - 1);
+                                        list.add(word);
+                                        System.out.println();
+                                        System.out.println(word);
+                                        word = null;
+                                    }
                                 }
 
                             }
                         }
 
-                        //if () ;
                 }
             }
         }
@@ -138,6 +165,41 @@ same - (1, 1) - (4, 1)
         }
         return cross2;
     }
+
+//    public static Word findWordHorizRight(int[][] cross2, char[] ch, int wordLenth) {
+//        //ищем по горизонтали вправо
+//        for (int m = 1; m < wordLenth; m++) {
+//        int checkWordLenth = 0; //Счетчик совпадений символов
+//        int firstCharX = 0;
+//        int firstCharY = 0;
+//        int lastCharX = 0;
+//        int lastCharY = 0;
+//
+//
+//        if ((l + 1) + (wordLenth - 1) <= cross2[k].length) {
+//            if (cross2[k][l + m] == ch[m]) {
+//                sB.append((char) cross2[k][l + m]);
+//                System.out.print((char) cross2[k][l + m]);
+//                checkWordLenth = checkWordLenth + 1;
+//            }
+//            else checkWordLenth = 0;
+//
+//            if (checkWordLenth == wordLenth) {
+//
+//                lastCharX = k;     //Определяем координаты (строка)
+//                lastCharY = l + m; //последней буквы (столбец)
+//
+//                Word word = new Word(sB.toString());
+//                word.setStartPoint(firstCharY - 1, firstCharX - 1);
+//                word.setEndPoint(lastCharY - 1, lastCharX - 1);
+//                list.add(word);
+//                System.out.println();
+//                System.out.println(word);
+//                word = null;
+//            }
+//        }
+//    }
+//    }
 
     public static class Word {
         private String text;

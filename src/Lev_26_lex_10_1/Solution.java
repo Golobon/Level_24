@@ -5,41 +5,30 @@ package Lev_26_lex_10_1;
 */
 
 public class Solution {
-    public static void main(String[] s) {
-        A a = new C();
-        a.method2();
+    public static void main(String[] args) {
+        byte[][] a1 = new byte[][]{
+                {1, 1, 0, 0},
+                {1, 1, 0, 0},
+                {1, 1, 0, 0},
+                {1, 1, 0, 1}
+        };
+        byte[][] a2 = new byte[][]{
+                {1, 0, 0, 1},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {1, 0, 0, 1}
+        };
+
+        int count1 = getRectangleCount(a1);
+        System.out.println("count = " + count1 + ". Должно быть 2");
+        int count2 = getRectangleCount(a2);
+        System.out.println("count = " + count2 + ". Должно быть 4");
     }
 
-    public static class A {
-        private void method1() {
-            System.out.println("A class, method1");
-        }
-
-        public void method2() {
-            System.out.println("A class, method2");
-            method1();
-        }
-    }
-
-    public static class B extends A {
-        private void method1() {
-            super.method2();
-            System.out.println("B class, method1");
-        }
-
-        public void method2() {
-            System.out.println("B class, method2");
-        }
-    }
-
-    public static class C extends B {
-        private void method1() {
-            System.out.println("C class, method1");
-        }
-
-        public void method2() {
-            System.out.println("C class, method2");
-            super.method1();
-        }
-    }
-}
+    public static int getRectangleCount(byte[][] a) {
+        int result = 0;
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                if (a[i][j] == 1 && (i == a.length - 1 || a[i + 1][j] == 0) && (j == a[i].length - 1 || a[i][j + 1] == 0)) {
+                   result = result + 1; } } }
+        return result; } }

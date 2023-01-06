@@ -10,11 +10,11 @@ import java.util.List;
 public class Solution {
     public static void main(String[] args) {
         int[][] crossword = new int[][]{
-                {'f', 'd', 's', 'r', 'l', 'k'},
-                {'u', 's', 'a', 'm', 'e', 'o'},
-                {'l', 'e', 'm', 'a', 'm', 'v'},
-                {'m', 'l', 'e', 'r', 'a', 'h'},
-                {'p', 'o', 'e', 'e', 's', 'j'}
+                {'f', 's', 's', 'r', 'l', 'e'},
+                {'u', 'e', 'a', 'm', 's', 'o'},
+                {'l', 'e', 'm', 'm', 'm', 'v'},
+                {'m', 'l', 'm', 'a', 'e', 'h'},
+                {'p', 'e', 'e', 'e', 's', 'j'}
         };
 
         List<Word> list = detectAllWords(crossword, "same");
@@ -58,12 +58,34 @@ same - (1, 1) - (4, 1)
                         //Ищем по горизонтале вправо
                         Word wHR = findWordHorizRight(cross2, ch, wordLenth, firstCharY, firstCharX);
                         if (wHR != null) list.add(wHR);
+
                         //Ищем по горизонтале влево
                         Word wHL = findWordHorizLeft(cross2, ch, wordLenth, firstCharY, firstCharX);
                         if (wHL != null) list.add(wHL);
+
                         //Ищем по вертикали вверх
                         Word wVU = findWordVertUp(cross2, ch, wordLenth, firstCharY, firstCharX);
                         if (wVU != null) list.add(wVU);
+
+                        //Ищем по вертикали вниз
+                        Word wVD = findWordVertDown(cross2, ch, wordLenth, firstCharY, firstCharX);
+                        if (wVD != null) list.add(wVD);
+
+                        //Ищем по диагонали вверх вправо
+                        Word wHVUR = findWordHorVerUpRight(cross2, ch, wordLenth, firstCharY, firstCharX);
+                        if (wHVUR != null) list.add(wHVUR);
+
+                        //Ищем по диагонали вверх влево
+                        Word wHVUL = findWordHorVerUpLeft(cross2, ch, wordLenth, firstCharY, firstCharX);
+                        if (wHVUL != null) list.add(wHVUL);
+
+                        //Ищем по диагонали вниз влево
+                        Word wHVDL = findWordHorVerDownLeft(cross2, ch, wordLenth, firstCharY, firstCharX);
+                        if (wHVDL != null) list.add(wHVDL);
+
+                        //Ищем по диагонали вниз вправо
+                        Word wHVDR = findWordHorVerDownRight(cross2, ch, wordLenth, firstCharY, firstCharX);
+                        if (wHVDR != null) list.add(wHVDR);
 
 
                     }
@@ -93,7 +115,6 @@ same - (1, 1) - (4, 1)
     }
 
     public static Word findWordHorizRight(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
-        //ищем по горизонтали вправо
         Word word = null;
         StringBuilder sB = new StringBuilder();
         sB.append(ch[0]);
@@ -123,7 +144,6 @@ same - (1, 1) - (4, 1)
     }
 
     public static Word findWordHorizLeft(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
-        //ищем по горизонтали вправо
         Word word = null;
         StringBuilder sB = new StringBuilder();
         sB.append(ch[0]);
@@ -153,7 +173,6 @@ same - (1, 1) - (4, 1)
     }
 
     public static Word findWordVertUp(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
-        //ищем по горизонтали вправо
         Word word = null;
         StringBuilder sB = new StringBuilder();
         sB.append(ch[0]);
@@ -172,7 +191,7 @@ same - (1, 1) - (4, 1)
 
                 if (checkWordLenth == wordLenth) {
                     lastCharX = k - m;     //Определяем координаты (строка)
-                    lastCharY = l; //последней буквы (столбец)
+                    lastCharY = l;         //последней буквы (столбец)
                     word = new Word(sB.toString());
                     word.setStartPoint(firstCharY - 1, firstCharX - 1);
                     word.setEndPoint(lastCharY - 1, lastCharX - 1);
@@ -183,7 +202,6 @@ same - (1, 1) - (4, 1)
     }
 
     public static Word findWordVertDown(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
-        //ищем по горизонтали вправо
         Word word = null;
         StringBuilder sB = new StringBuilder();
         sB.append(ch[0]);
@@ -194,15 +212,131 @@ same - (1, 1) - (4, 1)
         int lastCharY;
 
         for (int m = 1; m < wordLenth; m++) {
-            if (k - (wordLenth - 1) > 0) {
-                if (cross2[k - m][l] == ch[m]) {
-                    sB.append((char) cross2[k - m][l]);
+            if ((k + 1) + (wordLenth - 1) <= cross2.length) {
+                if (cross2[k + m][l] == ch[m]) {
+                    sB.append((char) cross2[k + m][l]);
+                    checkWordLenth = checkWordLenth + 1;
+                }
+
+                if (checkWordLenth == wordLenth) {
+                    lastCharX = k + m;     //Определяем координаты (строка)
+                    lastCharY = l;         //последней буквы (столбец)
+                    word = new Word(sB.toString());
+                    word.setStartPoint(firstCharY - 1, firstCharX - 1);
+                    word.setEndPoint(lastCharY - 1, lastCharX - 1);
+                }
+            }
+        }
+        return word;
+    }
+
+    public static Word findWordHorVerUpRight(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
+        Word word = null;
+        StringBuilder sB = new StringBuilder();
+        sB.append(ch[0]);
+        int checkWordLenth = 1; //Счетчик совпадений символов
+        int k = firstCharX;
+        int l = firstCharY;
+        int lastCharX;
+        int lastCharY;
+
+        for (int m = 1; m < wordLenth; m++) {
+            if ((l + 1) + (wordLenth - 1) <= cross2[k].length && k - (wordLenth - 1) > 0) {
+                if (cross2[k - m][l + m] == ch[m]) {
+                    sB.append((char) cross2[k - m][l + m]);
                     checkWordLenth = checkWordLenth + 1;
                 }
 
                 if (checkWordLenth == wordLenth) {
                     lastCharX = k - m;     //Определяем координаты (строка)
-                    lastCharY = l; //последней буквы (столбец)
+                    lastCharY = l + m; //последней буквы (столбец)
+                    word = new Word(sB.toString());
+                    word.setStartPoint(firstCharY - 1, firstCharX - 1);
+                    word.setEndPoint(lastCharY - 1, lastCharX - 1);
+                }
+            }
+        }
+        return word;
+    }
+
+    public static Word findWordHorVerUpLeft(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
+        Word word = null;
+        StringBuilder sB = new StringBuilder();
+        sB.append(ch[0]);
+        int checkWordLenth = 1; //Счетчик совпадений символов
+        int k = firstCharX;
+        int l = firstCharY;
+        int lastCharX;
+        int lastCharY;
+
+        for (int m = 1; m < wordLenth; m++) {
+            if (l - (wordLenth - 1) > 0 && k - (wordLenth - 1) > 0) {
+                if (cross2[k - m][l - m] == ch[m]) {
+                    sB.append((char) cross2[k - m][l - m]);
+                    checkWordLenth = checkWordLenth + 1;
+                }
+
+                if (checkWordLenth == wordLenth) {
+                    lastCharX = k - m;     //Определяем координаты (строка)
+                    lastCharY = l - m; //последней буквы (столбец)
+                    word = new Word(sB.toString());
+                    word.setStartPoint(firstCharY - 1, firstCharX - 1);
+                    word.setEndPoint(lastCharY - 1, lastCharX - 1);
+                }
+            }
+        }
+        return word;
+    }
+
+    public static Word findWordHorVerDownLeft(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
+        Word word = null;
+        StringBuilder sB = new StringBuilder();
+        sB.append(ch[0]);
+        int checkWordLenth = 1; //Счетчик совпадений символов
+        int k = firstCharX;
+        int l = firstCharY;
+        int lastCharX;
+        int lastCharY;
+
+        for (int m = 1; m < wordLenth; m++) {
+            if (l - (wordLenth - 1) > 0 && (k + 1) + (wordLenth - 1) <= cross2.length) {
+                if (cross2[k + m][l - m] == ch[m]) {
+                    sB.append((char) cross2[k + m][l - m]);
+                    checkWordLenth = checkWordLenth + 1;
+                }
+
+                if (checkWordLenth == wordLenth) {
+                    lastCharX = k + m;     //Определяем координаты (строка)
+                    lastCharY = l - m;     //последней буквы (столбец)
+                    word = new Word(sB.toString());
+                    word.setStartPoint(firstCharY - 1, firstCharX - 1);
+                    word.setEndPoint(lastCharY - 1, lastCharX - 1);
+                }
+            }
+        }
+        return word;
+    }
+
+    public static Word findWordHorVerDownRight(int[][] cross2, char[] ch, int wordLenth, int firstCharY, int firstCharX) {
+        Word word = null;
+        StringBuilder sB = new StringBuilder();
+        sB.append(ch[0]);
+        int checkWordLenth = 1; //Счетчик совпадений символов
+        int k = firstCharX;
+        int l = firstCharY;
+        int lastCharX;
+        int lastCharY;
+
+        for (int m = 1; m < wordLenth; m++) {
+            if ((l + 1) + (wordLenth - 1) <= cross2[k].length && (k + 1) + (wordLenth - 1) <= cross2.length) {
+                if (cross2[k + m][l + m] == ch[m]) {
+                    sB.append((char) cross2[k + m][l + m]);
+                    checkWordLenth = checkWordLenth + 1;
+                }
+
+                if (checkWordLenth == wordLenth) {
+                    lastCharX = k + m;     //Определяем координаты (строка)
+                    lastCharY = l + m;     //последней буквы (столбец)
                     word = new Word(sB.toString());
                     word.setStartPoint(firstCharY - 1, firstCharX - 1);
                     word.setEndPoint(lastCharY - 1, lastCharX - 1);
